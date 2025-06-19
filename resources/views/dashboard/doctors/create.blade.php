@@ -42,21 +42,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="mb-3">
-                        <label for="profile_image" class="form-label">Profile Image</label>
-                        <div class="drop-zone text-center p-4" id="dropZone" style="background-color: #11849B; border: 2px dashed #ffffff; border-radius: 4px; color: #ffffff;">
-                            <i class="fas fa-cloud-upload-alt fa-2x"></i>
-                            <p class="mb-1">Drag & Drop to Upload File</p>
-                            <p class="mb-2">OR</p>
-                            <button type="button" class="btn btn-light btn-sm" id="browseButton">Browse File</button>
-                            <span id="fileName" class="text-white mt-2 d-block">No file chosen</span>
-                            <input type="file" id="profile_image" name="profile_image" class="d-none" accept="image/*">
-                        </div>
-                        @error('profile_image')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
+                     <div class="mb-3">
                         <label for="specializations" class="form-label">Specializations</label>
                         <div class="d-flex flex-wrap gap-3" id="specializationTiles">
                             @foreach ($specializations as $specialization)
@@ -74,6 +60,21 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                    <div class="mb-3">
+                        <label for="profile_image" class="form-label">Profile Image</label>
+                        <div class="drop-zone text-center p-4" id="dropZone" style="background-color: #11849B; border: 2px dashed #ffffff; border-radius: 4px; color: #ffffff;">
+                            <i class="fas fa-cloud-upload-alt fa-2x"></i>
+                            <p class="mb-1">Drag & Drop to Upload File</p>
+                            <p class="mb-2">OR</p>
+                            <button type="button" class="btn btn-light btn-sm" id="browseButton">Browse File</button>
+                            <span id="fileName" class="text-white mt-2 d-block">No file chosen</span>
+                            <input type="file" id="profile_image" name="profile_image" class="d-none" accept="image/*">
+                        </div>
+                        @error('profile_image')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                   
                     <button type="submit" class="btn btn-primary" style="background-color: #11849B; border-color: #11849B;">Create Doctor</button>
                 </form>
             </div>
