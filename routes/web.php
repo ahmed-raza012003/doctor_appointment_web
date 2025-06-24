@@ -28,7 +28,9 @@ Route::get('/', function () {
 // Authenticated routes
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+    Route::get('logout', [AuthenticatedSessionController::class, 'destroy'])
+        ->name('logout');
 });
 
 // Admin routes with explicit GET and POST

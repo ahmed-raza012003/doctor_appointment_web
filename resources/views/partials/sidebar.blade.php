@@ -21,76 +21,72 @@
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav scroll-sidebar" data-simplebar="" style="background-color: #ffffff;">
             <ul id="sidebarnav">
-                @hasrole('Admin|patient')
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="{{ route('dashboard') }}" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
-                            <span>
-                                <i class="ti ti-layout-dashboard" style="color: #11849B;"></i>
-                            </span>
-                            <span class="hide-menu">Dashboard</span>
-                        </a>
-                    </li>
-                @endhasrole
-                @hasrole('Admin')
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="{{ route('admin.categories.index') }}" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
-                            <span>
-                                <i class="ti ti-folder" style="color: #11849B;"></i>
-                            </span>
-                            <span class="hide-menu">Categories</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="/admin/specializations" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
-                            <span>
-                                <i class="ti ti-ribbon-health" style="color: #11849B;"></i>
-                            </span>
-                            <span class="hide-menu">Specializations</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="/admin/doctors" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
-                            <span>
-                                <i class="ti ti-stethoscope" style="color: #11849B;"></i>
-                            </span>
-                            <span class="hide-menu">Doctors</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="/admin/patients" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
-                            <span>
-                                <i class="ti ti-users" style="color: #11849B;"></i>
-                            </span>
-                            <span class="hide-menu">Patients</span>
-                        </a>
-                    </li>
-                @endhasrole
-                @hasrole('Admin|patient')
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="/admin/consultations" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
-                            <span>
-                                <i class="ti ti-calendar-event" style="color: #11849B;"></i>
-                            </span>
-                            <span class="hide-menu">Consultations</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="{{ route('admin.services.index') }}" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
-                            <span>
-                                <i class="ti ti-briefcase" style="color: #11849B;"></i>
-                            </span>
-                            <span class="hide-menu">Services</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="{{ route('admin.blogs.index') }}" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
-                            <span>
-                                <i class="ti ti-file" style="color: #11849B;"></i>
-                            </span>
-                            <span class="hide-menu">Blogs</span>
-                        </a>
-                    </li>
-                @endhasrole
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/dashboard" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
+                        <span>
+                            <i class="ti ti-layout-dashboard" style="color: #11849B;"></i>
+                        </span>
+                        <span class="hide-menu">Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+    <a class="sidebar-link" href="{{ route('admin.categories.index') }}" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
+        <span>
+            <i class="ti ti-folder" style="color: #11849B;"></i>
+        </span>
+        <span class="hide-menu">Categories</span>
+    </a>
+</li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/admin/specializations" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
+                        <span>
+                            <i class="ti ti-ribbon-health" style="color: #11849B;"></i>
+                        </span>
+                        <span class="hide-menu">Specializations</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+    <a class="sidebar-link" href="/admin/doctors" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
+        <span>
+            <i class="ti ti-stethoscope" style="color: #11849B;"></i>
+        </span>
+        <span class="hide-menu">Doctors</span>
+    </a>
+</li>
+
+<li class="sidebar-item">
+                    <a class="sidebar-link" href="/admin/patients" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
+                        <span>
+                            <i class="ti ti-users" style="color: #11849B;"></i>
+                        </span>
+                        <span class="hide-menu">Patients</span>
+                    </a>
+                </li>
+
+           <li class="sidebar-item">
+    <a class="sidebar-link" href="/admin/consultations" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
+        <span>
+            <i class="ti ti-calendar-event" style="color: #11849B;"></i>
+        </span>
+        <span class="hide-menu">Consultations</span>
+    </a>
+</li>
+<li class="sidebar-item">
+    <a class="sidebar-link" href="/admin/services" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
+        <span>
+            <i class="ti ti-briefcase" style="color: #11849B;"></i>
+        </span>
+        <span class="hide-menu">Services</span>
+    </a>
+</li>
+<li class="sidebar-item">
+    <a class="sidebar-link" href="{{ route('admin.blogs.index') }}" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
+        <span>
+            <i class="ti ti-file" style="color: #11849B;"></i>
+        </span>
+        <span class="hide-menu">Blogs</span>
+    </a>
+</li>
             </ul>
         </nav>
         <!-- End Sidebar navigation -->
