@@ -2,44 +2,43 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="card">
+        <div class="card shadow-sm">
             <div class="card-body">
-                <h5 class="card-title fw-semibold mb-4">Manage Specializations</h5>
+                <h5 class="card-title fw-semibold mb-4">Manage Blogs</h5>
                 @if (session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
-                <a href="{{ route('admin.specializations.create') }}" class="btn btn-primary mb-3" style="background-color: #11849B; border-color: #11849B;">Add Specialization</a>
+                <a href="{{ route('admin.blogs.create') }}" class="btn btn-primary mb-3" style="background-color: #11849B; border-color: #11849B;">Add Blog</a>
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Name</th>
-                                <th>Category</th>
-                                <th>Description</th>
-                                <th>Image</th>
+                                <th>Title</th>
+                                <th>Feature Image</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($specializations as $specialization)
+                            @forelse ($blogs as $blog)
                                 <tr>
-                                    <td>{{ $specialization->id }}</td>
-                                    <td>{{ $specialization->name }}</td>
-                                    <td>{{ $specialization->category->name ?? 'N/A' }}</td>
-                                    <td>{{ Str::limit($specialization->description, 50) }}</td>
+                                    <td>{{ $blog->id }}</td>
+                                    <td>{{ Str::limit($blog->title, 50, '...') }}</td>
                                     <td>
-                                        @if ($specialization->image)
-                                            <img src="{{ asset('storage/' . $specialization->image) }}" alt="{{ $specialization->name }}" style="max-width: 50px; height: auto; border-radius: 4px;">
+                                        @if ($blog->feature_image)
+                                            <img src="{{ Storage::url($blog->feature_image) }}" alt="{{ $blog->title }}" style="max-width: 50px; height: auto; border-radius: 4px;">
                                         @else
-                                            No Image
+                                            <span>No Image</span>
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('admin.specializations.edit', $specialization->id) }}" class="btn btn-sm btn-outline-primary me-2" title="Edit">
+                                        <a href="{{ route('admin.blogs.show', $blog->id) }}" class="btn btn-sm btn-outline-primary me-2" title="View">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('admin.blogs.edit', $blog->id) }}" class="btn btn-sm btn-outline-primary me-2" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('admin.specializations.destroy', $specialization->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Are you sure you want to delete this specialization?');">
+                                        <form action="{{ route('admin.blogs.destroy', $blog->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Are you sure you want to delete this blog?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
@@ -50,12 +49,13 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center">No specializations found.</td>
+                                    <td colspan="4" class="text-center">No blogs found.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
+                {{ $blogs->links() }}
             </div>
         </div>
     </div>

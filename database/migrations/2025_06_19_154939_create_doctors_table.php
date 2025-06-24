@@ -14,7 +14,13 @@ return new class extends Migration
             $table->string('email')->nullable()->unique();
             $table->string('phone_number')->nullable();
             $table->integer('experience')->unsigned();
-             $table->string('profile_image')->nullable();
+            $table->text('description')->nullable();
+            $table->text('bio')->nullable();
+            $table->text('qualifications')->nullable();
+            $table->text('experience_details')->nullable();
+            $table->text('activism')->nullable();
+            $table->text('special_interests')->nullable();
+            $table->string('profile_image')->nullable();
             $table->integer('patients_satisfied')->unsigned()->default(0);
             $table->timestamps();
         });

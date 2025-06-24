@@ -7,6 +7,8 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SpecializationController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\BlogController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -37,11 +39,21 @@ Route::prefix('admin')->middleware([])->group(function () {
 
     // Store new specialization
     Route::post('specializations', [SpecializationController::class, 'store'])->name('admin.specializations.store');
+Route::get('specializations/{specialization}/edit', [SpecializationController::class, 'edit'])->name('admin.specializations.edit');
+    Route::put('specializations/{specialization}', [SpecializationController::class, 'update'])->name('admin.specializations.update');
+    Route::delete('specializations/{specialization}', [SpecializationController::class, 'destroy'])->name('admin.specializations.destroy');
 
+    // Doctor and Patient management
  Route::get('doctors', [DoctorController::class, 'index'])->name('admin.doctors.index');
     Route::get('doctors/create', [DoctorController::class, 'create'])->name('admin.doctors.create');
     Route::post('doctors', [DoctorController::class, 'store'])->name('admin.doctors.store');
-   Route::get('patients', [PatientController::class, 'index'])->name('admin.patients.index');
+   Route::get('doctors/{doctor}/edit', [DoctorController::class, 'edit'])->name('admin.doctors.edit');
+    Route::put('doctors/{doctor}', [DoctorController::class, 'update'])->name('admin.doctors.update');
+    Route::delete('doctors/{doctor}', [DoctorController::class, 'destroy'])->name('admin.doctors.destroy');
+   
+   
+   
+    Route::get('patients', [PatientController::class, 'index'])->name('admin.patients.index');
     Route::get('patients/create', [PatientController::class, 'create'])->name('admin.patients.create');
     Route::post('patients', [PatientController::class, 'store'])->name('admin.patients.store');
     Route::get('patients/{patient}/edit', [PatientController::class, 'edit'])->name('admin.patients.edit');
@@ -53,5 +65,18 @@ Route::get('services', [ServiceController::class, 'index'])->name('admin.service
     Route::get('services/{service}/edit', [ServiceController::class, 'edit'])->name('admin.services.edit');
     Route::put('services/{service}', [ServiceController::class, 'update'])->name('admin.services.update');
     Route::delete('services/{service}', [ServiceController::class, 'destroy'])->name('admin.services.destroy');
+Route::get('categories', [CategoryController::class, 'index'])->name('admin.categories.index');
+    Route::get('categories/create', [CategoryController::class, 'create'])->name('admin.categories.create');
+    Route::post('categories', [CategoryController::class, 'store'])->name('admin.categories.store');
+    Route::get('categories/{category}/edit', [CategoryController::class, 'edit'])->name('admin.categories.edit');
+    Route::put('categories/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
+    Route::delete('categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
+Route::get('blogs', [BlogController::class, 'index'])->name('admin.blogs.index');
+    Route::get('blogs/create', [BlogController::class, 'create'])->name('admin.blogs.create');
+    Route::post('blogs', [BlogController::class, 'store'])->name('admin.blogs.store');
+    Route::get('blogs/{blog}/edit', [BlogController::class, 'edit'])->name('admin.blogs.edit');
+    Route::put('blogs/{blog}', [BlogController::class, 'update'])->name('admin.blogs.update');
+    Route::delete('blogs/{blog}', [BlogController::class, 'destroy'])->name('admin.blogs.destroy');
+    Route::get('blogs/{blog}', [BlogController::class, 'show'])->name('admin.blogs.show');
 });
 
