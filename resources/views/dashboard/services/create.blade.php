@@ -2,66 +2,97 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title fw-semibold mb-4">Add Service</h5>
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h5 class="card-title fw-semibold mb-3">Add Service</h5>
                 <form method="POST" action="{{ route('admin.services.store') }}" enctype="multipart/form-data" id="serviceForm">
                     @csrf
-                    <div class="mb-3">
-                        <label for="patient_id" class="form-label">Patient</label>
-                        <select class="form-control @error('patient_id') is-invalid @enderror" id="patient_id" name="patient_id" required>
-                            <option value="">Select a Patient</option>
-                            @foreach ($patients as $patient)
-                                <option value="{{ $patient->id }}">{{ $patient->user->name }} ({{ $patient->cnic }})</option>
-                            @endforeach
-                        </select>
-                        @error('patient_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                    <div class="row g-3">
+                        <!-- First Column -->
+                        <div class="col-md-6">
+                            <div class="mb-2">
+                                <label for="title" class="form-label fw-medium">Title <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title') }}" required>
+                                @error('title')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-2">
+                                <label for="description" class="form-label fw-medium">Description <span class="text-danger">*</span></label>
+                                <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="8">{{ old('description') }}</textarea>
+                                @error('description')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <!-- Second Column -->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="image" class="form-label fw-medium">Service Image <span class="text-danger">*</span></label>
+                                <div class="drop-zone text-center p-2" id="imageDropZone" style="background-color: #11849B; border: 2px dashed #ffffff; border-radius: 4px; color: #ffffff;">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p class="small mb-1">Drag & Drop or</p>
+                                    <button type="button" class="btn btn-light btn-sm px-2 py-0" id="browseButton">Browse</button>
+                                    <span id="fileName" class="text-white small mt-1 d-block">No file chosen</span>
+                                    <input type="file" id="image" name="image" class="d-none" accept="image/*" required>
+                                </div>
+                                @error('image')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="doctor_id" class="form-label">Doctor</label>
-                        <select class="form-control @error('doctor_id') is-invalid @enderror" id="doctor_id" name="doctor_id" required>
-                            <option value="">Select a Doctor</option>
-                            @foreach ($doctors as $doctor)
-                                <option value="{{ $doctor->id }}">{{ $doctor->name }} ({{ $doctor->email }})</option>
-                            @endforeach
-                        </select>
-                        @error('doctor_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="date" class="form-label">Date</label>
-                        <input type="date" class="form-control @error('date') is-invalid @enderror" id="date" name="date" value="{{ old('date') }}" required>
-                        @error('date')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="time" class="form-label">Time</label>
-                        <input type="time" class="form-control @error('time') is-invalid @enderror" id="time" name="time" value="{{ old('time') }}" required>
-                        @error('time')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="services" class="form-label">Services</label>
-                        <input type="text" class="form-control @error('services') is-invalid @enderror" id="services" name="services" value="{{ old('services') }}" required>
-                        @error('services')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="remarks" class="form-label">Remarks</label>
-                        <textarea class="form-control @error('remarks') is-invalid @enderror" id="remarks" name="remarks" rows="3">{{ old('remarks') }}</textarea>
-                        @error('remarks')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="background-color: #11849B; border-color: #11849B;">Create Service</button>
+                    <button type="submit" class="btn btn-primary px-4" style="background-color: #11849B; border-color: #11849B;">Create Service</button>
+                    <a href="{{ route('admin.services.index') }}" class="btn btn-secondary px-4">Cancel</a>
                 </form>
             </div>
         </div>
     </div>
+
+    <script>
+        const dropZone = document.getElementById('imageDropZone');
+        const imageInput = document.getElementById('image');
+        const fileName = document.getElementById('fileName');
+        const browseButton = document.getElementById('browseButton');
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.backgroundColor = '#0f6d81';
+        });
+
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.style.backgroundColor = '#11849B';
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.backgroundColor = '#11849B';
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                imageInput.files = files;
+                fileName.textContent = files[0].name;
+            }
+        });
+
+        browseButton.addEventListener('click', () => imageInput.click());
+
+        imageInput.addEventListener('change', () => {
+            if (imageInput.files[0]) {
+                fileName.textContent = imageInput.files[0].name;
+            }
+        });
+    </script>
+
+    <style>
+        .drop-zone:hover {
+            background-color: #0f6d81 !important;
+        }
+        .card {
+            border: none;
+        }
+        .form-label {
+            font-size: 0.95rem;
+        }
+    </style>
 @endsection

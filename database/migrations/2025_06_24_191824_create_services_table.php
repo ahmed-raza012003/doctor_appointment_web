@@ -10,12 +10,9 @@ return new class extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('patient_id')->constrained('patients')->onDelete('cascade');
-            $table->foreignId('doctor_id')->constrained('doctors')->onDelete('cascade');
-            $table->date('date');
-            $table->time('time');
-            $table->string('services');
-            $table->text('remarks')->nullable();
+            $table->string('title');
+            $table->longText('description');
+            $table->string('image');
             $table->timestamps();
         });
     }

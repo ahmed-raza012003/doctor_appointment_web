@@ -3,12 +3,14 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\SpecializationController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ServiceController;
+
 
 use Illuminate\Support\Facades\Route;
 
@@ -59,12 +61,12 @@ Route::get('specializations/{specialization}/edit', [SpecializationController::c
     Route::get('patients/{patient}/edit', [PatientController::class, 'edit'])->name('admin.patients.edit');
     Route::put('patients/{patient}', [PatientController::class, 'update'])->name('admin.patients.update');
     Route::delete('patients/{patient}', [PatientController::class, 'destroy'])->name('admin.patients.destroy');
-Route::get('services', [ServiceController::class, 'index'])->name('admin.services.index');
-    Route::get('services/create', [ServiceController::class, 'create'])->name('admin.services.create');
-    Route::post('services', [ServiceController::class, 'store'])->name('admin.services.store');
-    Route::get('services/{service}/edit', [ServiceController::class, 'edit'])->name('admin.services.edit');
-    Route::put('services/{service}', [ServiceController::class, 'update'])->name('admin.services.update');
-    Route::delete('services/{service}', [ServiceController::class, 'destroy'])->name('admin.services.destroy');
+Route::get('consultations', [ConsultationController::class, 'index'])->name('admin.Consultations.index');
+    Route::get('consultations/create', [ConsultationController::class, 'create'])->name('admin.consultations.create');
+    Route::post('consultations', [ConsultationController::class, 'store'])->name('admin.consultations.store');
+    Route::get('consultations/{consultation}/edit', [ConsultationController::class, 'edit'])->name('admin.consultations.edit');
+    Route::put('consultations/{consultation}', [ConsultationController::class, 'update'])->name('admin.consultations.update');
+    Route::delete('consultations/{consultation}', [ConsultationController::class, 'destroy'])->name('admin.consultations.destroy');
 Route::get('categories', [CategoryController::class, 'index'])->name('admin.categories.index');
     Route::get('categories/create', [CategoryController::class, 'create'])->name('admin.categories.create');
     Route::post('categories', [CategoryController::class, 'store'])->name('admin.categories.store');
@@ -78,5 +80,12 @@ Route::get('blogs', [BlogController::class, 'index'])->name('admin.blogs.index')
     Route::put('blogs/{blog}', [BlogController::class, 'update'])->name('admin.blogs.update');
     Route::delete('blogs/{blog}', [BlogController::class, 'destroy'])->name('admin.blogs.destroy');
     Route::get('blogs/{blog}', [BlogController::class, 'show'])->name('admin.blogs.show');
+    Route::get('services', [ServiceController::class, 'index'])->name('admin.services.index');
+    Route::get('services/create', [ServiceController::class, 'create'])->name('admin.services.create');
+    Route::post('services', [ServiceController::class, 'store'])->name('admin.services.store');
+    Route::get('services/{service}/edit', [ServiceController::class, 'edit'])->name('admin.services.edit');
+    Route::put('services/{service}', [ServiceController::class, 'update'])->name('admin.services.update');
+    Route::delete('services/{service}', [ServiceController::class, 'destroy'])->name('admin.services.destroy'); 
+
 });
 

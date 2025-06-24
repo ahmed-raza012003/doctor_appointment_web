@@ -2,26 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'patient_id',
-        'doctor_id',
-        'date',
-        'time',
-        'services',
-        'remarks',
+        'title',
+        'description',
+        'image',
     ];
-
-    public function patient()
-    {
-        return $this->belongsTo(Patient::class);
-    }
-
-    public function doctor()
-    {
-        return $this->belongsTo(Doctor::class);
-    }
 }
