@@ -3,70 +3,83 @@
 namespace App\Http\Controllers;
 
 use App\Models\Service;
-use App\Models\Patient;
-use App\Models\Doctor;
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
 
 class ServiceController extends Controller
 {
-   
-
-    public function index(): View
+    public function index()
     {
-        $services = Service::with(['patient', 'doctor'])->get();
+        $services = Service::latest()->paginate(10);
         return view('dashboard.services.index', compact('services'));
     }
 
-    public function create(): View
+    public function create()
     {
-        $patients = Patient::all();
-        $doctors = Doctor::all();
-        return view('dashboard.services.create', compact('patients', 'doctors'));
+        return view('dashboard.services.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
-        $request->validate([
-            'patient_id' => ['required', 'exists:patients,id'],
-            'doctor_id' => ['required', 'exists:doctors,id'],
-            'date' => ['required', 'date'],
-            'time' => ['required', 'date_format:H:i'],
-            'services' => ['required', 'string', 'max:255'],
-            'remarks' => ['nullable', 'string'],
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        Service::create($request->all());
+        $data = $request->only(['title', 'description']);
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('images', 'public');
+        }
+
+        Service::create($data);
 
         return redirect()->route('admin.services.index')->with('success', 'Service created successfully.');
     }
 
-    public function edit(Service $service): View
+    public function show(Service $service)
     {
-        $patients = Patient::all();
-        $doctors = Doctor::all();
-        return view('dashboard.services.edit', compact('service', 'patients', 'doctors'));
+        return view('dashboard.services.show', compact('service'));
     }
 
-    public function update(Request $request, Service $service): RedirectResponse
+    public function edit(Service $service)
     {
-        $request->validate([
-            'patient_id' => ['required', 'exists:patients,id'],
-            'doctor_id' => ['required', 'exists:doctors,id'],
-            'date' => ['required', 'date'],
-            'time' => ['required', 'date_format:H:i'],
-            'services' => ['required', 'string', 'max:255'],
-            'remarks' => ['nullable', 'string'],
+        return view('dashboard.services.edit', compact('service'));
+    }
+
+    public function update(Request $request, Service $service)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $service->update($request->all());
+        $data = $request->only(['title', 'description']);
+
+        // Handle image update
+        if ($request->hasFile('image')) {
+            // Delete old image
+            if ($service->image) {
+                Storage::disk('public')->delete($service->image);
+            }
+            $data['image'] = $request->file('image')->store('images', 'public');
+        }
+
+        $service->update($data);
 
         return redirect()->route('admin.services.index')->with('success', 'Service updated successfully.');
     }
 
-    public function destroy(Service $service): RedirectResponse
+    public function destroy(Service $service)
     {
+        // Delete associated image
+        if ($service->image) {
+            Storage::disk('public')->delete($service->image);
+        }
+
         $service->delete();
 
         return redirect()->route('admin.services.index')->with('success', 'Service deleted successfully.');

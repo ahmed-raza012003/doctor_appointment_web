@@ -4,22 +4,23 @@
     <div class="container-fluid">
         <div class="card shadow-sm">
             <div class="card-body p-4">
-                <h5 class="card-title fw-semibold mb-3">Add Service</h5>
-                <form method="POST" action="{{ route('admin.services.store') }}" enctype="multipart/form-data" id="serviceForm">
+                <h5 class="card-title fw-semibold mb-3">Edit Category</h5>
+                <form method="POST" action="{{ route('admin.categories.update', $category->id) }}" enctype="multipart/form-data" id="categoryForm">
                     @csrf
+                    @method('PUT')
                     <div class="row g-3">
                         <!-- First Column -->
                         <div class="col-md-6">
                             <div class="mb-2">
-                                <label for="title" class="form-label fw-medium">Title <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title') }}" required>
-                                @error('title')
+                                <label for="name" class="form-label fw-medium">Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $category->name) }}" required>
+                                @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-2">
-                                <label for="description" class="form-label fw-medium">Description <span class="text-danger">*</span></label>
-                                <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="8">{{ old('description') }}</textarea>
+                                <label for="description" class="form-label fw-medium">Description</label>
+                                <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="4">{{ old('description', $category->description) }}</textarea>
                                 @error('description')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -28,33 +29,39 @@
                         <!-- Second Column -->
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="image" class="form-label fw-medium">Service Image <span class="text-danger">*</span></label>
-                                <div class="drop-zone text-center p-2" id="imageDropZone" style="background-color: #11849B; border: 2px dashed #ffffff; border-radius: 4px; color: #ffffff;">
+                                <label for="picture" class="form-label fw-medium">Category Image</label>
+                                <div class="drop-zone text-center p-2" id="dropZone" style="background-color: #11849B; border: 2px dashed #ffffff; border-radius: 4px; color: #ffffff;">
                                     <i class="fas fa-cloud-upload-alt"></i>
                                     <p class="small mb-1">Drag & Drop or</p>
                                     <button type="button" class="btn btn-light btn-sm px-2 py-0" id="browseButton">Browse</button>
-                                    <span id="fileName" class="text-white small mt-1 d-block">No file chosen</span>
-                                    <input type="file" id="image" name="image" class="d-none" accept="image/*" required>
+                                    <span id="fileName" class="text-white small mt-1 d-block">{{ $category->picture ? basename($category->picture) : 'No file chosen' }}</span>
+                                    <input type="file" id="picture" name="picture" class="d-none" accept="image/*">
                                 </div>
-                                @error('image')
+                                @if ($category->picture)
+                                    <div class="mt-2">
+                                        <img src="{{ asset('storage/' . $category->picture) }}" alt="{{ $category->name }}" style="max-width: 100px; height: auto; border-radius: 4px;">
+                                    </div>
+                                @endif
+                                @error('picture')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary px-4" style="background-color: #11849B; border-color: #11849B;">Create Service</button>
-                    <a href="{{ route('admin.services.index') }}" class="btn btn-secondary px-4">Cancel</a>
+                    <button type="submit" class="btn btn-primary px-4" style="background-color: #11849B; border-color: #11849B;">Update Category</button>
+                    <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary px-4 ms-2">Cancel</a>
                 </form>
             </div>
         </div>
     </div>
 
     <script>
-        const dropZone = document.getElementById('imageDropZone');
-        const imageInput = document.getElementById('image');
+        const dropZone = document.getElementById('dropZone');
+        const imageInput = document.getElementById('picture');
         const fileName = document.getElementById('fileName');
         const browseButton = document.getElementById('browseButton');
 
+        // Drag and drop functionality
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
             dropZone.style.backgroundColor = '#0f6d81';

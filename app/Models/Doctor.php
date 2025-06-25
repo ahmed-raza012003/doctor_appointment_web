@@ -12,6 +12,12 @@ class Doctor extends Model
         'phone_number',
         'experience',
         'patients_satisfied',
+        'description',
+        'bio',
+        'qualifications',
+        'experience_details',
+        'activism',
+        'special_interests',
         'profile_image',
     ];
 

@@ -30,6 +30,14 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
+    <a class="sidebar-link" href="{{ route('admin.categories.index') }}" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
+        <span>
+            <i class="ti ti-folder" style="color: #11849B;"></i>
+        </span>
+        <span class="hide-menu">Categories</span>
+    </a>
+</li>
+                <li class="sidebar-item">
                     <a class="sidebar-link" href="/admin/specializations" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
                         <span>
                             <i class="ti ti-ribbon-health" style="color: #11849B;"></i>
@@ -55,14 +63,30 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/admin/services" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
-                        <span>
-                            <i class="ti ti-tools" style="color: #11849B;"></i>
-                        </span>
-                        <span class="hide-menu">Services</span>
-                    </a>
-                </li>
+           <li class="sidebar-item">
+    <a class="sidebar-link" href="/admin/consultations" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
+        <span>
+            <i class="ti ti-calendar-event" style="color: #11849B;"></i>
+        </span>
+        <span class="hide-menu">Consultations</span>
+    </a>
+</li>
+<li class="sidebar-item">
+    <a class="sidebar-link" href="/admin/services" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
+        <span>
+            <i class="ti ti-briefcase" style="color: #11849B;"></i>
+        </span>
+        <span class="hide-menu">Services</span>
+    </a>
+</li>
+<li class="sidebar-item">
+    <a class="sidebar-link" href="{{ route('admin.blogs.index') }}" aria-expanded="false" style="background-color: #ffffff; color: #11849B;">
+        <span>
+            <i class="ti ti-file" style="color: #11849B;"></i>
+        </span>
+        <span class="hide-menu">Blogs</span>
+    </a>
+</li>
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

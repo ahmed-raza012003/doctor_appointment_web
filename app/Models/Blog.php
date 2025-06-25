@@ -5,13 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Service extends Model
+class Blog extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'title',
         'description',
-        'image',
+        'feature_image',
+        'description_image_1',
+        'description_image_2',
     ];
 }

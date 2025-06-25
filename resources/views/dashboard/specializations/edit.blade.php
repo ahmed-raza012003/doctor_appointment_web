@@ -5,19 +5,20 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Add Specialization</h4>
-                    <form method="POST" action="{{ route('admin.specializations.store') }}" enctype="multipart/form-data" id="specializationForm">
+                    <h4 class="card-title">Edit Specialization</h4>
+                    <form method="POST" action="{{ route('admin.specializations.update', $specialization->id) }}" enctype="multipart/form-data" id="specializationForm">
                         @csrf
+                        @method('PUT')
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $specialization->name) }}" required>
                             @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="mb-3">
                             <label for="description" class="form-label">Description</label>
-                            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="4">{{ old('description') }}</textarea>
+                            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="4">{{ old('description', $specialization->description) }}</textarea>
                             @error('description')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -27,7 +28,7 @@
                             <select class="form-control @error('category_id') is-invalid @enderror" id="category_id" name="category_id" required>
                                 <option value="">Select a category</option>
                                 @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    <option value="{{ $category->id }}" {{ old('category_id', $specialization->category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                                 @endforeach
                             </select>
                             @error('category_id')
@@ -41,14 +42,20 @@
                                 <p>Drag & Drop to Upload File</p>
                                 <p>OR</p>
                                 <button type="button" class="btn btn-light mb-2" id="browseButton">Browse File</button>
-                                <span id="fileName">No file chosen</span>
+                                <span id="fileName">{{ $specialization->image ? basename($specialization->image) : 'No file chosen' }}</span>
                                 <input type="file" id="image" name="image" class="d-none" accept="image/*">
                             </div>
+                            @if ($specialization->image)
+                                <div class="mt-2">
+                                    <img src="{{ asset('storage/' . $specialization->image) }}" alt="{{ $specialization->name }}" style="max-width: 100px; height: auto; border-radius: 4px;">
+                                </div>
+                            @endif
                             @error('image')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <button type="submit" class="btn btn-primary" style="background-color: #11849B; border-color: #11849B; border-radius: 4px;">Create Specialization</button>
+                        <button type="submit" class="btn btn-primary" style="background-color: #11849B; border-color: #11849B; border-radius: 4px;">Update Specialization</button>
+                        <a href="{{ route('admin.specializations.index') }}" class="btn btn-secondary" style="border-radius: 4px;">Cancel</a>
                     </form>
                 </div>
             </div>
@@ -61,7 +68,6 @@
         const fileName = document.getElementById('fileName');
         const browseButton = document.getElementById('browseButton');
 
-        // Drag and drop functionality
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
             dropZone.style.backgroundColor = '#0f6d81';
@@ -82,7 +88,6 @@
             }
         });
 
-        // Browse button functionality
         browseButton.addEventListener('click', () => {
             input.click();
         });
