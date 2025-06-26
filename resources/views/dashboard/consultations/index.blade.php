@@ -18,7 +18,7 @@
                                 <th>Doctor</th>
                                 <th>Date</th>
                                 <th>Time</th>
-                                <th>consultations</th>
+                                <th>Services</th>
                                 <th>Remarks</th>
                                 <th>Actions</th>
                             </tr>
