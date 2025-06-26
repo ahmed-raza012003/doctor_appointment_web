@@ -7,8 +7,12 @@
                 <h5 class="card-title fw-semibold mb-3">{{ $blog->title }}</h5>
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <h6 class="fw-medium">Description</h6>
-                        <p class="border p-3 rounded" style="background-color: #f8f9fa;">{!! nl2br(e($blog->description)) !!}</p>
+                        <h6 class="fw-medium">Category</h6>
+                        <p class="border p-3 rounded" style="background-color: #f8f9fa;">{{ $blog->category ? $blog->category->name : 'No Category' }}</p>
+                        <h6 class="fw-medium mt-3">Description Card</h6>
+                        <p class="border p-3 rounded" style="background-color: #f8f9fa;">{!! nl2br(e($blog->description_card)) !!}</p>
+                        <h6 class="fw-medium mt-3">Description Page</h6>
+                        <p class="border p-3 rounded" style="background-color: #f8f9fa;">{!! nl2br(e($blog->description_page)) !!}</p>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">

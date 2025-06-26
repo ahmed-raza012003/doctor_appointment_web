@@ -79,4 +79,19 @@ class CategoryController extends Controller
 
         return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
     }
+
+    public function apiIndex()
+    {
+        $categories = Category::all()->map(function ($category) {
+            return [
+                'name' => $category->name,
+                'description' => $category->description,
+                'image' => $category->picture ? asset('storage/' . $category->picture) : null,
+            ];
+        });
+
+        return response()->json([
+            'categories' => $categories,
+        ], 200);
+    }
 }

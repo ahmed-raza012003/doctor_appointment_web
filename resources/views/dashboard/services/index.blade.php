@@ -14,7 +14,7 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Title</th>
+                                <th>Name</th>
                                 <th>Image</th>
                                 <th>Actions</th>
                             </tr>
@@ -23,10 +23,10 @@
                             @forelse ($services as $service)
                                 <tr>
                                     <td>{{ $service->id }}</td>
-                                    <td>{{ Str::limit($service->title, 50, '...') }}</td>
+                                    <td>{{ Str::limit($service->name, 50, '...') }}</td>
                                     <td>
                                         @if ($service->image)
-                                            <img src="{{ Storage::url($service->image) }}" alt="{{ $service->title }}" style="max-width: 50px; height: auto; border-radius: 4px;">
+                                            <img src="{{ Storage::url($service->image) }}" alt="{{ $service->name }}" style="max-width: 50px; height: auto; border-radius: 4px;">
                                         @else
                                             <span>No Image</span>
                                         @endif

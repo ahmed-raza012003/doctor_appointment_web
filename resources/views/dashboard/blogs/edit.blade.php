@@ -5,7 +5,7 @@
         <div class="card shadow-sm">
             <div class="card-body p-4">
                 <h5 class="card-title fw-semibold mb-3">Edit Blog</h5>
-                <form method="POST" action="{{ route('blogs.update', $blog->id) }}" enctype="multipart/form-data" id="blogForm">
+                <form method="POST" action="{{ route('admin.blogs.update', $blog->id) }}" enctype="multipart/form-data" id="blogForm">
                     @csrf
                     @method('PUT')
                     <div class="row g-3">
@@ -19,9 +19,28 @@
                                 @enderror
                             </div>
                             <div class="mb-2">
-                                <label for="description" class="form-label fw-medium">Description <span class="text-danger">*</span></label>
-                               /theme/lara/public/textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="8">{{ old('description', $blog->description) }}</textarea>
-                                @error('description')
+                                <label for="category_id" class="form-label fw-medium">Category <span class="text-danger">*</span></label>
+                                <select class="form-control @error('category_id') is-invalid @enderror" id="category_id" name="category_id" required>
+                                    <option value="" disabled>Select a category</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ old('category_id', $blog->category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('category_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-2">
+                                <label for="description_card" class="form-label fw-medium">Description Card <span class="text-danger">*</span></label>
+                                <textarea class="form-control @error('description_card') is-invalid @enderror" id="description_card" name="description_card" rows="4">{{ old('description_card', $blog->description_card) }}</textarea>
+                                @error('description_card')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-2">
+                                <label for="description_page" class="form-label fw-medium">Description Page <span class="text-danger">*</span></label>
+                                <textarea class="form-control @error('description_page') is-invalid @enderror" id="description_page" name="description_page" rows="4">{{ old('description_page', $blog->description_page) }}</textarea>
+                                @error('description_page')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -93,7 +112,7 @@
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary px-4" style="background-color: #11849B; border-color: #11849B;">Update Blog</button>
-                    <a href="{{ route('blogs.index') }}" class="btn btn-secondary px-4">Cancel</a>
+                    <a href="{{ route('admin.blogs.index') }}" class="btn btn-secondary px-4">Cancel</a>
                 </form>
             </div>
         </div>

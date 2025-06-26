@@ -15,6 +15,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Title</th>
+                                <th>Category</th>
                                 <th>Feature Image</th>
                                 <th>Actions</th>
                             </tr>
@@ -24,6 +25,7 @@
                                 <tr>
                                     <td>{{ $blog->id }}</td>
                                     <td>{{ Str::limit($blog->title, 50, '...') }}</td>
+                                    <td>{{ $blog->category ? $blog->category->name : 'No Category' }}</td>
                                     <td>
                                         @if ($blog->feature_image)
                                             <img src="{{ Storage::url($blog->feature_image) }}" alt="{{ $blog->title }}" style="max-width: 50px; height: auto; border-radius: 4px;">
@@ -49,7 +51,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="text-center">No blogs found.</td>
+                                    <td colspan="5" class="text-center">No blogs found.</td>
                                 </tr>
                             @endforelse
                         </tbody>

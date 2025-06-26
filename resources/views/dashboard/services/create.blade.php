@@ -11,9 +11,9 @@
                         <!-- First Column -->
                         <div class="col-md-6">
                             <div class="mb-2">
-                                <label for="title" class="form-label fw-medium">Title <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title') }}" required>
-                                @error('title')
+                                <label for="name" class="form-label fw-medium">Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
+                                @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

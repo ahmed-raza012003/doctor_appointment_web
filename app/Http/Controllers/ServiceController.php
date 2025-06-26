@@ -22,12 +22,12 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'description' => 'required|string',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $data = $request->only(['title', 'description']);
+        $data = $request->only(['name', 'description']);
 
         // Handle image upload
         if ($request->hasFile('image')) {
@@ -52,12 +52,12 @@ class ServiceController extends Controller
     public function update(Request $request, Service $service)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $data = $request->only(['title', 'description']);
+        $data = $request->only(['name', 'description']);
 
         // Handle image update
         if ($request->hasFile('image')) {
@@ -84,4 +84,19 @@ class ServiceController extends Controller
 
         return redirect()->route('admin.services.index')->with('success', 'Service deleted successfully.');
     }
+
+    public function apiIndex()
+{
+    $services = Service::all()->map(function ($service) {
+        return [
+            'name' => $service->name,
+            'description' => $service->description,
+            'image' => $service->image ? asset('storage/' . $service->image) : null,
+        ];
+    });
+
+    return response()->json([
+        'services' => $services,
+    ], 200);
+}
 }
