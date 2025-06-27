@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Service;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ServiceController extends Controller
@@ -42,7 +43,7 @@ class ServiceController extends Controller
 
             return redirect()->route('admin.services.index')->with('success', 'Service created successfully.');
         } catch (\Exception $e) {
-            \Log::error('Service creation failed: ' . $e->getMessage());
+            Log::error('Service creation failed: ' . $e->getMessage());
             return back()->withInput()->with('error', 'Failed to create service: ' . $e->getMessage());
         }
     }
@@ -84,7 +85,7 @@ class ServiceController extends Controller
 
             return redirect()->route('admin.services.index')->with('success', 'Service updated successfully.');
         } catch (\Exception $e) {
-            \Log::error('Service update failed: ' . $e->getMessage());
+            Log::error('Service update failed: ' . $e->getMessage());
             return back()->withInput()->with('error', 'Failed to update service: ' . $e->getMessage());
         }
     }
@@ -100,7 +101,7 @@ class ServiceController extends Controller
 
             return redirect()->route('admin.services.index')->with('success', 'Service deleted successfully.');
         } catch (\Exception $e) {
-            \Log::error('Service deletion failed: ' . $e->getMessage());
+            Log::error('Service deletion failed: ' . $e->getMessage());
             return back()->with('error', 'Failed to delete service: ' . $e->getMessage());
         }
     }

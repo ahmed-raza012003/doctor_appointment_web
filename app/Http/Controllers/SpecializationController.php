@@ -83,4 +83,25 @@ class SpecializationController extends Controller
         $specialization->delete();
         return redirect()->route('admin.specializations.index')->with('success', 'Specialization deleted successfully.');
     }
+
+       public function apiIndex()
+    {
+        $specializations = Specialization::with('category')->latest()->get();
+        return response()->json([
+            'success' => true,
+            'data' => $specializations->map(function ($service) {
+                return [
+                    'id' => $service->id,
+                    'name' => $service->name,
+                    'description' => $service->description,
+                    'category' => $service->category ? [
+                        'id' => $service->category->id,
+                        'name' => $service->category->name,
+                    ] : null,
+                    'image' => $service->image ? Storage::url($service->image) : null,
+                   
+                ];
+            }),
+        ], 200);
+    }
 }

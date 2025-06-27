@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Doctor;
+use App\Models\Service;
 use App\Models\Specialization;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -22,13 +23,23 @@ class DoctorController extends Controller
     }
 
     /**
+     * Show the specified doctor by slug.
+     */
+    public function show(Doctor $doctor): View
+    {
+        $doctor->load(['specializations', 'services']);
+        return view('dashboard.doctors.show', compact('doctor'));
+    }
+
+    /**
      * Show the form for creating a new doctor.
      */
     public function create(): View
     {
         $specializations = Specialization::all();
         $categories = Category::all();
-        return view('dashboard.doctors.create', compact('specializations', 'categories'));
+        $services = Service::all();
+        return view('dashboard.doctors.create', compact('specializations', 'categories', 'services'));
     }
 
     /**
@@ -36,7 +47,7 @@ class DoctorController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['nullable', 'email', 'max:255', 'unique:doctors,email'],
             'phone_number' => ['nullable', 'string', 'max:20'],
@@ -50,6 +61,9 @@ class DoctorController extends Controller
             'special_interests' => ['nullable', 'string', 'max:1000'],
             'profile_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'specializations' => ['required', 'array'],
+            'specializations.*' => ['exists:specializations,id'],
+            'services' => ['required', 'array'],
+            'services.*' => ['exists:services,id'],
         ]);
 
         $data = $request->only([
@@ -63,16 +77,20 @@ class DoctorController extends Controller
             'qualifications',
             'experience_details',
             'activism',
-            'special_interests'
+            'special_interests',
         ]);
 
+        // Generate slug from name
+        $data['slug'] = Doctor::generateSlug($request->name);
+
+        // Handle profile image upload
         if ($request->hasFile('profile_image')) {
             $data['profile_image'] = $request->file('profile_image')->store('doctors', 'public');
         }
 
         $doctor = Doctor::create($data);
 
-        // Prepare specialization data with category_id
+        // Sync specializations
         $specializationData = [];
         foreach ($request->input('specializations', []) as $specId) {
             $specialization = Specialization::find($specId);
@@ -81,6 +99,9 @@ class DoctorController extends Controller
             }
         }
         $doctor->specializations()->sync($specializationData);
+
+        // Sync services
+        $doctor->services()->sync($request->input('services', []));
 
         return redirect()->route('admin.doctors.index')->with('success', 'Doctor created successfully.');
     }
@@ -92,7 +113,9 @@ class DoctorController extends Controller
     {
         $specializations = Specialization::all();
         $categories = Category::all();
-        return view('dashboard.doctors.edit', compact('doctor', 'specializations', 'categories'));
+        $services = Service::all();
+        $doctor->load(['specializations', 'services']);
+        return view('dashboard.doctors.edit', compact('doctor', 'specializations', 'categories', 'services'));
     }
 
     /**
@@ -100,7 +123,7 @@ class DoctorController extends Controller
      */
     public function update(Request $request, Doctor $doctor): RedirectResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['nullable', 'email', 'max:255', 'unique:doctors,email,' . $doctor->id],
             'phone_number' => ['nullable', 'string', 'max:20'],
@@ -114,6 +137,9 @@ class DoctorController extends Controller
             'special_interests' => ['nullable', 'string', 'max:1000'],
             'profile_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'specializations' => ['required', 'array'],
+            'specializations.*' => ['exists:specializations,id'],
+            'services' => ['required', 'array'],
+            'services.*' => ['exists:services,id'],
         ]);
 
         $data = $request->only([
@@ -127,20 +153,30 @@ class DoctorController extends Controller
             'qualifications',
             'experience_details',
             'activism',
-            'special_interests'
+            'special_interests',
         ]);
 
+        // Update slug if name has changed
+        if ($doctor->name !== $request->name) {
+            $data['slug'] = Doctor::generateSlug($request->name, $doctor->id);
+        }
+
+        // Handle profile image update
         if ($request->hasFile('profile_image')) {
-            // Delete old image if it exists
             if ($doctor->profile_image) {
                 Storage::disk('public')->delete($doctor->profile_image);
             }
             $data['profile_image'] = $request->file('profile_image')->store('doctors', 'public');
+        } elseif ($request->has('remove_profile_image')) {
+            if ($doctor->profile_image) {
+                Storage::disk('public')->delete($doctor->profile_image);
+            }
+            $data['profile_image'] = null;
         }
 
         $doctor->update($data);
 
-        // Prepare specialization data with category_id
+        // Sync specializations
         $specializationData = [];
         foreach ($request->input('specializations', []) as $specId) {
             $specialization = Specialization::find($specId);
@@ -149,6 +185,9 @@ class DoctorController extends Controller
             }
         }
         $doctor->specializations()->sync($specializationData);
+
+        // Sync services
+        $doctor->services()->sync($request->input('services', []));
 
         return redirect()->route('admin.doctors.index')->with('success', 'Doctor updated successfully.');
     }
@@ -162,7 +201,61 @@ class DoctorController extends Controller
             Storage::disk('public')->delete($doctor->profile_image);
         }
         $doctor->specializations()->detach();
+        $doctor->services()->detach();
         $doctor->delete();
         return redirect()->route('admin.doctors.index')->with('success', 'Doctor deleted successfully.');
+    }
+
+    /**
+     * Display a listing of doctors for API.
+     */
+    public function apiIndex()
+    {
+        try {
+            $doctors = Doctor::with(['specializations', 'services'])->get()->map(function ($doctor) {
+                return [
+                    'id' => $doctor->id,
+                    'name' => $doctor->name,
+                    'slug' => $doctor->slug,
+                    'email' => $doctor->email,
+                    'phone_number' => $doctor->phone_number,
+                    'experience' => $doctor->experience,
+                    'patients_satisfied' => $doctor->patients_satisfied,
+                    'qualifications' => $doctor->qualifications,
+                    'description' => $doctor->description,
+                    'bio' => $doctor->bio,
+                    'experience_details' => $doctor->experience_details,
+                    'activism' => $doctor->activism,
+                    'special_interests' => $doctor->special_interests,
+                    'profile_image' => $doctor->profile_image ? Storage::url($doctor->profile_image) : null,
+                    'specializations' => $doctor->specializations->map(function ($specialization) {
+                        return [
+                            'id' => $specialization->id,
+                            'name' => $specialization->name,
+                            'category_id' => $specialization->pivot->category_id,
+                        ];
+                    }),
+                    'services' => $doctor->services->map(function ($service) {
+                        return [
+                            'id' => $service->id,
+                            'name' => $service->name,
+                            'category_id' => $service->category_id,
+                        ];
+                    }),
+                    'created_at' => $doctor->created_at,
+                    'updated_at' => $doctor->updated_at,
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => $doctors,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while fetching doctors.',
+            ], 500);
+        }
     }
 }

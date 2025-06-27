@@ -19,4 +19,8 @@ class Service extends Model
     {
         return $this->belongsTo(Category::class);
     }
+    public function doctors()
+    {
+        return $this->belongsToMany(Doctor::class, 'doctor_service');
+    }
 }

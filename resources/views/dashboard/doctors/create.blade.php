@@ -101,7 +101,7 @@
                     <div class="row g-3 mt-3">
                         <div class="col-12">
                             <div class="mb-3">
-                                <label for="category" class="form-label fw-medium">Filter Specializations by Category</label>
+                                <label for="category" class="form-label fw-medium">Filter Specializations and Services by Category</label>
                                 <select id="category" class="form-select">
                                     <option value="all">All</option>
                                     @foreach ($categories as $category)
@@ -115,19 +115,41 @@
                     <div class="row g-3">
                         <div class="col-12">
                             <div class="mb-3">
-                                <label for="specializations" class="form-label fw-medium">Specializations</label>
+                                <label for="specializations" class="form-label fw-medium">Specializations <span class="text-danger">*</span></label>
                                 <p class="text-muted small mb-2">Select one or more specializations by clicking the tiles below (e.g., Cardiology, Neurology).</p>
                                 <div class="d-flex flex-wrap gap-2" id="specializationTiles">
                                     @foreach ($specializations as $specialization)
                                         <div class="card tile-select border-0 shadow-sm" style="width: 130px; cursor: pointer;" data-category="{{ $specialization->category_id }}">
                                             <div class="card-body text-center p-2">
-                                                <input type="checkbox" name="specializations[]" value="{{ $specialization->id }}" id="spec_{{ $specialization->id }}" class="d-none">
+                                                <input type="checkbox" name="specializations[]" value="{{ $specialization->id }}" id="spec_{{ $specialization->id }}" class="d-none" {{ in_array($specialization->id, old('specializations', [])) ? 'checked' : '' }}>
                                                 <label for="spec_{{ $specialization->id }}" class="tile-label small mb-0">{{ $specialization->name }}</label>
                                             </div>
                                         </div>
                                     @endforeach
                                 </div>
                                 @error('specializations')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Services Section -->
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="services" class="form-label fw-medium">Services <span class="text-danger">*</span></label>
+                                <p class="text-muted small mb-2">Select one or more services by clicking the tiles below (e.g., Extraction, Implants).</p>
+                                <div class="d-flex flex-wrap gap-2" id="serviceTiles">
+                                    @foreach ($services as $service)
+                                        <div class="card tile-select border-0 shadow-sm" style="width: 130px; cursor: pointer;" data-category="{{ $service->category_id }}">
+                                            <div class="card-body text-center p-2">
+                                                <input type="checkbox" name="services[]" value="{{ $service->id }}" id="service_{{ $service->id }}" class="d-none" {{ in_array($service->id, old('services', [])) ? 'checked' : '' }}>
+                                                <label for="service_{{ $service->id }}" class="tile-label small mb-0">{{ $service->name }}</label>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                @error('services')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -158,12 +180,12 @@
     </div>
 
     <script>
+        // Drag and drop for profile image
         const dropZone = document.getElementById('dropZone');
         const imageInput = document.getElementById('profile_image');
         const fileName = document.getElementById('fileName');
         const browseButton = document.getElementById('browseButton');
 
-        // Drag and drop functionality
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
             dropZone.style.backgroundColor = '#0f6d81';
@@ -192,7 +214,7 @@
             }
         });
 
-        // Tile selection
+        // Tile selection for specializations and services
         document.querySelectorAll('.tile-select').forEach(tile => {
             tile.addEventListener('click', () => {
                 const checkbox = tile.querySelector('input[type="checkbox"]');
@@ -203,11 +225,23 @@
             });
         });
 
-        // Category filter
+        // Category filter for specializations and services
         document.getElementById('category').addEventListener('change', function() {
             const selectedCategory = this.value;
-            const tiles = document.querySelectorAll('.tile-select');
-            tiles.forEach(tile => {
+
+            // Filter Specialization Tiles
+            const specTiles = document.querySelectorAll('#specializationTiles .tile-select');
+            specTiles.forEach(tile => {
+                if (selectedCategory === 'all' || tile.getAttribute('data-category') === selectedCategory) {
+                    tile.style.display = 'block';
+                } else {
+                    tile.style.display = 'none';
+                }
+            });
+
+            // Filter Service Tiles
+            const serviceTiles = document.querySelectorAll('#serviceTiles .tile-select');
+            serviceTiles.forEach(tile => {
                 if (selectedCategory === 'all' || tile.getAttribute('data-category') === selectedCategory) {
                     tile.style.display = 'block';
                 } else {
