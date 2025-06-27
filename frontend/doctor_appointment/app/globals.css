@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+    @theme {
+    --color-primary: #11849B;
+    --colour-secondary: #25BED2;
+    --colour-secondary-dark: #1A8B9D;
+    --color-text: #ffffff;
+    --color-text-mid:#d1d5db;
+    --color-text-secondary: #27556E;
+    --color-secondary-text: #ccc;
+    }
+
+@layer components {
+  .list {
+    @apply flex items-center gap-1 h-8 px-2 text-white cursor-pointer hover:text-gray-300;
+  }
+  .header_heading_lists {
+    @apply text-white font-semibold hover:text-gray-300 hover:scale-105;
+  }
+  .ff {
+    @apply flex justify-center items-center;
+  }
+}
