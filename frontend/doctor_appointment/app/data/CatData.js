@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const fetchCatData = async () => {
   try {
-    const res = await axios.get("http://localhost:8000/api/categories");
+    const res = await axios.get("http://infophd:8000/api/categories");
     const categories = res.data.categories;
 
     return categories.map((cat) => ({

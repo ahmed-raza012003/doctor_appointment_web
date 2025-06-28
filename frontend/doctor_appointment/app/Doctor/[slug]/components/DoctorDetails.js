@@ -21,7 +21,7 @@ const DoctorDetail = ({data}) => {
       }
     };
     fetchDoctor();
-  }, []);
+  }, [data]);
 
   if (loading) return <p className="text-center mt-20">Loading...</p>;
   if (error) return <p className="text-center text-red-500 mt-20">{error}</p>;

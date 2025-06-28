@@ -22,7 +22,7 @@ const Page = () => {
       setBlogs(data);
     };
     loadData();
-  }, []);
+  }, [blogs]);
 
   const BlogData = blogs || [];
   const [currentPage, setCurrentPage] = useState(1);

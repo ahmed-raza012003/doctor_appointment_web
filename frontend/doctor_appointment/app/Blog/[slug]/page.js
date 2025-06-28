@@ -2,17 +2,24 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-export async function generateStaticParams() {
-  const res = await fetch("http://localhost:8000/api/blogs", { cache: "no-store" });
-  const data = await res.json();
+// export const dynamic = "force-dynamic";
 
-  return data.data.map((blog) => ({
-    slug: blog.slug,
-  }));
+export async function generateStaticParams() {
+  try {
+    const res = await fetch("http://infophd:8000/api/blogs", { cache: "no-store" });
+    const data = await res.json();
+    return data.data.map((blog) => ({
+      slug: blog.slug,
+    }));
+  } catch (error) {
+    console.error("Failed to fetch blog slugs:", error);
+    return []; // prevent build crash
+  }
 }
 
+
 export default async function BlogPage({ params }) {
-  const res = await fetch("http://localhost:8000/api/blogs", { cache: "no-store" });
+  const res = await fetch("http://infophd:8000/api/blogs", { cache: "no-store" });
   const data = await res.json();
   const blog = data.data.find((b) => b.slug === params.slug);
 
