@@ -28,7 +28,7 @@ const Section1 = () => {
 
   return (
     <section className="bg-primary mx-4 md:mx-8 my-10 relative rounded-4xl overflow-hidden">
-      <div className="flex flex-col-reverse md:flex-row justify-between items-center p-6 md:px-8 md:py-10 gap-6 md:gap-0">
+      <div className="flex md:flex-row justify-between items-center p-6 md:px-8 md:py-10 gap-6 md:gap-0">
         {/* Left Text Section */}
         <div className="flex flex-col gap-4 w-full md:w-1/2">
           <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl leading-snug md:leading-tight text-black">

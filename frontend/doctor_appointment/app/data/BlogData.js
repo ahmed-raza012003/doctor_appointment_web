@@ -286,7 +286,7 @@ import axios from "axios";
 
 export const fetchBlogData = async () => {
   try {
-    const res = await axios.get("http://infophd:8000/api/blogs");
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/blogs`);
     const blogs = res.data.data;
 
     // Transform the data into your desired format

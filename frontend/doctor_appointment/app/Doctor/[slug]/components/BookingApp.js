@@ -1,19 +1,20 @@
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 
-const fixedTimeSlots = [
-  { day: "Today", startTime: "10:00 AM", endTime: "11:00 AM" },
-  { day: "Tomorrow", startTime: "12:00 PM", endTime: "01:00 PM" },
-  { day: "Monday", startTime: "03:30 PM", endTime: "04:30 PM" },
-  { day: "Wednesday", startTime: "06:00 PM", endTime: "07:00 PM" },
-  { day: "Friday", startTime: "08:15 PM", endTime: "09:15 PM" },
-];
-const clinicData = {
-  fee: "Rs. 4,000",
-  address: "Link-2, Street-1, Near CSD, Islamabad",
-};
+// const fixedTimeSlots = [
+//   { day: "Today", startTime: "10:00 AM", endTime: "11:00 AM" },
+//   { day: "Tomorrow", startTime: "12:00 PM", endTime: "01:00 PM" },
+//   { day: "Monday", startTime: "03:30 PM", endTime: "04:30 PM" },
+//   { day: "Wednesday", startTime: "06:00 PM", endTime: "07:00 PM" },
+//   { day: "Friday", startTime: "08:15 PM", endTime: "09:15 PM" },
+// ];
+// const clinicData = {
+//   fee: "Rs. 4,000",
+//   address: "Link-2, Street-1, Near CSD, Islamabad",
+// };
 
-const BookingApp = ({name}) => {
+const BookingApp = ({name , fee , address , fixedTimeSlots}) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
@@ -40,7 +41,7 @@ const BookingApp = ({name}) => {
       <div className="mt-4 text-sm text-text flex flex-col gap-2 ">
         <div className="flex items-center justify-between ">
           <span className="font-semibold">Fee:</span>
-          <span className="font-bold">{clinicData.fee}</span>
+          <span className="font-bold">{fee}</span>
         </div>
 
         <div className="border-t-2 border-text-mid pt-2">
@@ -59,7 +60,7 @@ const BookingApp = ({name}) => {
                   <path d="M32,10c-7.732,0-14,6.268-14,14s6.268,14,14,14s14-6.268,14-14S39.732,10,32,10z M32,36c-6.627,0-12-5.373-12-12s5.373-12,12-12s12,5.373,12,12S38.627,36,32,36z" />
                 </svg>
                 <span className="font-semibold underline">
-                  {clinicData.address}
+                  {address}
                 </span>
               </div>
             </div>
@@ -121,9 +122,11 @@ const BookingApp = ({name}) => {
         </div>
       </div>
 
-      <button className="mt-4 w-full bg-primary font-bold text-white py-2 rounded hover:bg-text-secondary">
-        Book Appointment
-      </button>
+      <Link href="/patient">
+        <button className="mt-4 w-full bg-primary font-bold text-white py-2 rounded hover:bg-text-secondary">
+          Book Appointment
+        </button>
+      </Link>
     </div>
   );
 };

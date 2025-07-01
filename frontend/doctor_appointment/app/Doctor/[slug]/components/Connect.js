@@ -51,6 +51,8 @@ const Connect = ({ doctor }) => {
     satisfiedPatients,
   };
 
+  const address = "123 Main St, City, Country";
+
   return (
     <div className="min-h-screen w-full p-4">
       <div className="flex flex-row gap-6">
@@ -63,8 +65,8 @@ const Connect = ({ doctor }) => {
               className="w-full flex flex-col gap-4 mb-4"
               id="mobile-booking"
             >
-              <BookingApp name="Skin Life Clinic" />
-              <BookingApp name="Integrated Medical Hospital" />
+              <BookingApp name="Skin Life Clinic" fee="2000 Rs." address={address} fixedTimeSlots={doctor.fixedTimeSlots} />
+              <BookingApp name="Integrated Medical Hospital" fee="2500 Rs." address={address} fixedTimeSlots={doctor.fixedTimeSlots} />
             </div>
           )}
 
@@ -92,8 +94,8 @@ const Connect = ({ doctor }) => {
           <div className="w-full lg:w-1/3 relative">
             <div className="sticky top-4">
               <div className="flex flex-col gap-4">
-                <BookingApp name="Skin Life Clinic" />
-                <BookingApp name="Integrated Medical Hospital" />
+                <BookingApp name="Skin Life Clinic" fee="2000 Rs." address={address} fixedTimeSlots={doctor.fixedTimeSlots} />
+                <BookingApp name="Integrated Medical Hospital" fee="2500 Rs." address={address} fixedTimeSlots={doctor.fixedTimeSlots} />
               </div>
             </div>
           </div>

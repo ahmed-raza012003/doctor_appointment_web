@@ -171,7 +171,7 @@ import axios from "axios";
 
 export const getServicesData = async () => {
   try {
-    const res = await axios.get("http://infophd:8000/api/services");
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/services`);
     const services = res.data.data;
 
     // Group services by category name
@@ -187,7 +187,7 @@ export const getServicesData = async () => {
       grouped[categoryName].push({
         name: service.name,
         description: service.description,
-        image: `http://infophd:8000${service.image}`,
+        image: `${process.env.NEXT_PUBLIC_BACKEND_URL}${service.image}`,
       });
     });
 
