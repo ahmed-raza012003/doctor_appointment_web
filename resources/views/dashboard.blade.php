@@ -11,16 +11,16 @@
 </head>
 
 <body>
-    <!--  Body Wrapper -->
+    <!-- Body Wrapper -->
     <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
         <!-- Sidebar Start -->
         @include('partials.sidebar')
-        <!--  Sidebar End -->
-        <!--  Main wrapper -->
+        <!-- Sidebar End -->
+        <!-- Main wrapper -->
         <div class="body-wrapper">
-            <!--  Header Start -->
+            <!-- Header Start -->
             @include('partials.header')
-            <!--  Header End -->
+            <!-- Header End -->
             <div class="container-fluid">
                 @yield('content')
                 <div class="py-6 px-6 text-center">
