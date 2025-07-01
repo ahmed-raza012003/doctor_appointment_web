@@ -63,4 +63,8 @@ class Doctor extends Model
         }
         return "{$slug}-{$count}";
     }
+        public function educations()
+    {
+        return $this->hasMany(Education::class);
+    }
 }

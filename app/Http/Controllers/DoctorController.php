@@ -6,6 +6,7 @@ use App\Models\Doctor;
 use App\Models\Service;
 use App\Models\Specialization;
 use App\Models\Category;
+use App\Models\Education;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
@@ -27,7 +28,7 @@ class DoctorController extends Controller
      */
     public function show(Doctor $doctor): View
     {
-        $doctor->load(['specializations', 'services']);
+        $doctor->load(['specializations', 'services', 'educations']);
         return view('dashboard.doctors.show', compact('doctor'));
     }
 
@@ -64,6 +65,10 @@ class DoctorController extends Controller
             'specializations.*' => ['exists:specializations,id'],
             'services' => ['required', 'array'],
             'services.*' => ['exists:services,id'],
+            'education' => ['required', 'array', 'min:1'],
+            'education.*.degree' => ['required', 'string', 'max:255'],
+            'education.*.institution' => ['required', 'string', 'max:255'],
+            'education.*.year' => ['nullable', 'integer', 'min:1900', 'max:' . date('Y')],
         ]);
 
         $data = $request->only([
@@ -88,7 +93,17 @@ class DoctorController extends Controller
             $data['profile_image'] = $request->file('profile_image')->store('doctors', 'public');
         }
 
+        // Create doctor
         $doctor = Doctor::create($data);
+
+        // Store education entries
+        foreach ($request->input('education', []) as $education) {
+            $doctor->educations()->create([
+                'degree' => $education['degree'],
+                'institution' => $education['institution'],
+                'year' => $education['year'] ?? null,
+            ]);
+        }
 
         // Sync specializations
         $specializationData = [];
@@ -114,7 +129,7 @@ class DoctorController extends Controller
         $specializations = Specialization::all();
         $categories = Category::all();
         $services = Service::all();
-        $doctor->load(['specializations', 'services']);
+        $doctor->load(['specializations', 'services', 'educations']);
         return view('dashboard.doctors.edit', compact('doctor', 'specializations', 'categories', 'services'));
     }
 
@@ -140,6 +155,10 @@ class DoctorController extends Controller
             'specializations.*' => ['exists:specializations,id'],
             'services' => ['required', 'array'],
             'services.*' => ['exists:services,id'],
+            'education' => ['required', 'array', 'min:1'],
+            'education.*.degree' => ['required', 'string', 'max:255'],
+            'education.*.institution' => ['required', 'string', 'max:255'],
+            'education.*.year' => ['nullable', 'integer', 'min:1900', 'max:' . date('Y')],
         ]);
 
         $data = $request->only([
@@ -174,7 +193,18 @@ class DoctorController extends Controller
             $data['profile_image'] = null;
         }
 
+        // Update doctor
         $doctor->update($data);
+
+        // Update education entries (delete existing and create new)
+        $doctor->educations()->delete();
+        foreach ($request->input('education', []) as $education) {
+            $doctor->educations()->create([
+                'degree' => $education['degree'],
+                'institution' => $education['institution'],
+                'year' => $education['year'] ?? null,
+            ]);
+        }
 
         // Sync specializations
         $specializationData = [];
@@ -202,6 +232,7 @@ class DoctorController extends Controller
         }
         $doctor->specializations()->detach();
         $doctor->services()->detach();
+        $doctor->educations()->delete();
         $doctor->delete();
         return redirect()->route('admin.doctors.index')->with('success', 'Doctor deleted successfully.');
     }
@@ -212,7 +243,7 @@ class DoctorController extends Controller
     public function apiIndex()
     {
         try {
-            $doctors = Doctor::with(['specializations', 'services'])->get()->map(function ($doctor) {
+            $doctors = Doctor::with(['specializations', 'services', 'educations'])->get()->map(function ($doctor) {
                 return [
                     'id' => $doctor->id,
                     'name' => $doctor->name,
@@ -240,6 +271,14 @@ class DoctorController extends Controller
                             'id' => $service->id,
                             'name' => $service->name,
                             'category_id' => $service->category_id,
+                        ];
+                    }),
+                    'educations' => $doctor->educations->map(function ($education) {
+                        return [
+                            'id' => $education->id,
+                            'degree' => $education->degree,
+                            'institution' => $education->institution,
+                            'year' => $education->year,
                         ];
                     }),
                     'created_at' => $doctor->created_at,
