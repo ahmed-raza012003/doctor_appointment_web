@@ -10,16 +10,18 @@ use Illuminate\Support\Facades\Validator;
 class TimeslotController extends Controller
 {
     /**
-     * Display a listing of the timeslots.
+     * Display a listing of the timeslots for a specific doctor.
      */
-
-        public function manage($doctor_id)
+    public function manage($doctor_id)
     {
         $doctor = Doctor::findOrFail($doctor_id);
         $timeslots = Timeslot::where('doctor_id', $doctor_id)->get();
         return view('dashboard.timeslots.manage', compact('doctor', 'timeslots'));
     }
 
+    /**
+     * Display a listing of all timeslots.
+     */
     public function index()
     {
         $timeslots = Timeslot::with('doctor')->get();
@@ -53,7 +55,8 @@ class TimeslotController extends Controller
 
         Timeslot::create($request->all());
 
-        return redirect()->route('admin.timeslots.index')->with('success', 'Timeslot created successfully.');
+        return redirect()->route('admin.timeslots.manage', $request->doctor_id)
+            ->with('success', 'Timeslot created successfully.');
     }
 
     /**
@@ -85,7 +88,8 @@ class TimeslotController extends Controller
         $timeslot = Timeslot::findOrFail($id);
         $timeslot->update($request->all());
 
-        return redirect()->route('admin.timeslots.index')->with('success', 'Timeslot updated successfully.');
+        return redirect()->route('admin.timeslots.manage', $request->doctor_id)
+            ->with('success', 'Timeslot updated successfully.');
     }
 
     /**
@@ -94,8 +98,10 @@ class TimeslotController extends Controller
     public function destroy($id)
     {
         $timeslot = Timeslot::findOrFail($id);
+        $doctor_id = $timeslot->doctor_id; // Store doctor_id before deletion
         $timeslot->delete();
 
-        return redirect()->route('admin.timeslots.index')->with('success', 'Timeslot deleted successfully.');
+        return redirect()->route('admin.timeslots.manage', $doctor_id)
+            ->with('success', 'Timeslot deleted successfully.');
     }
 }
