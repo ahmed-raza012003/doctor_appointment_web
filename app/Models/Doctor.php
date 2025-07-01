@@ -67,4 +67,9 @@ class Doctor extends Model
     {
         return $this->hasMany(Education::class);
     }
+
+    public function timeslots()
+    {
+        return $this->hasMany(Timeslot::class);
+    }
 }

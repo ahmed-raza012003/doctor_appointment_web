@@ -10,6 +10,7 @@ use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\TimeslotController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -88,6 +89,12 @@ Route::get('blogs', [BlogController::class, 'index'])->name('admin.blogs.index')
     Route::get('services/{service}/edit', [ServiceController::class, 'edit'])->name('admin.services.edit');
     Route::put('services/{service}', [ServiceController::class, 'update'])->name('admin.services.update');
     Route::delete('services/{service}', [ServiceController::class, 'destroy'])->name('admin.services.destroy'); 
-
+Route::get('timeslots', [TimeslotController::class, 'index'])->name('admin.timeslots.index');
+    Route::get('timeslots/create', [TimeslotController::class, 'create'])->name('admin.timeslots.create');
+    Route::post('timeslots', [TimeslotController::class, 'store'])->name('admin.timeslots.store');
+    Route::get('timeslots/{timeslot}/edit', [TimeslotController::class, 'edit'])->name('admin.timeslots.edit');
+    Route::put('timeslots/{timeslot}', [TimeslotController::class, 'update'])->name('admin.timeslots.update');
+    Route::delete('timeslots/{timeslot}', [TimeslotController::class, 'destroy'])->name('admin.timeslots.destroy');
+Route::get('timeslots/manage/{doctor_id}', [TimeslotController::class, 'manage'])->name('admin.timeslots.manage');
 });
 

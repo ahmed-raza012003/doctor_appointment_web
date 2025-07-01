@@ -5,10 +5,10 @@
     <div class="card shadow-sm">
         <div class="card-body p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="card-title fw-semibold">Doctors List</h5>
+                <h5 class="card-title fw-semibold">Timeslots List</h5>
                 <div>
-                    <a href="{{ route('admin.doctors.create') }}" class="btn btn-primary me-2" style="background-color: #11849B; border-color: #11849B;">Add New Doctor</a>
-                    <a href="{{ route('admin.timeslots.index') }}" class="btn btn-outline-primary" style="color: #11849B; border-color: #11849B;">View Timeslots</a>
+                    <a href="{{ route('admin.timeslots.create') }}" class="btn btn-primary me-2" style="background-color: #11849B; border-color: #11849B;">Add New Timeslot</a>
+                    <a href="{{ route('admin.doctors.index') }}" class="btn btn-outline-primary" style="color: #11849B; border-color: #11849B;">Back to Doctors</a>
                 </div>
             </div>
 
@@ -19,30 +19,25 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Experience</th>
-                        <th>Patients Satisfied</th>
+                        <th>Doctor</th>
+                        <th>Day</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($doctors as $doctor)
+                    @forelse ($timeslots as $timeslot)
                         <tr>
-                            <td>{{ $doctor->name }}</td>
-                            <td>{{ $doctor->email ?? 'N/A' }}</td>
-                            <td>{{ $doctor->phone_number ?? 'N/A' }}</td>
-                            <td>{{ $doctor->experience }} years</td>
-                            <td>{{ $doctor->patients_satisfied }}</td>
+                            <td>{{ $timeslot->doctor->name ?? 'N/A' }}</td>
+                            <td>{{ $timeslot->day }}</td>
+                            <td>{{ \Carbon\Carbon::parse($timeslot->start_time)->format('h:i A') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($timeslot->end_time)->format('h:i A') }}</td>
                             <td>
-                                <a href="{{ route('admin.timeslots.manage', $doctor->id) }}" class="btn btn-sm btn-outline-primary me-2" title="Manage Timeslots">
-                                    <i class="fas fa-clock"></i>
-                                </a>
-                                <a href="{{ route('admin.doctors.edit', $doctor->id) }}" class="btn btn-sm btn-outline-primary me-2" title="Edit">
+                                <a href="{{ route('admin.timeslots.edit', $timeslot->id) }}" class="btn btn-sm btn-outline-primary me-2" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('admin.doctors.destroy', $doctor->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Are you sure you want to delete this doctor?');">
+                                <form action="{{ route('admin.timeslots.destroy', $timeslot->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Are you sure you want to delete this timeslot?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
@@ -51,7 +46,11 @@
                                 </form>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center">No timeslots found.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

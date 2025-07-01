@@ -281,6 +281,16 @@ class DoctorController extends Controller
                             'year' => $education->year,
                         ];
                     }),
+                    // Add time_slots relation data
+                    'time_slots' => $doctor->timeSlots->map(function ($timeSlot) {
+                        return [
+                            'id' => $timeSlot->id,
+                            'day' => $timeSlot->day,
+                            'start_time' => $timeSlot->start_time,
+                            'end_time' => $timeSlot->end_time,
+                        ];
+                    }),
+                    
                     'created_at' => $doctor->created_at,
                     'updated_at' => $doctor->updated_at,
                 ];
