@@ -32,7 +32,7 @@ const DoctorDetail = ({data}) => {
         {/* Doctor Image */}
         <div className="relative m-w-24 m-h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 rounded-full border-2 border-gray-200 self-center lg:self-start">
           <Image
-            src={doctor.image}
+            src={doctor.image || "/d1.jpg"}
             width={200}
             height={200}
             alt="Doctor"
@@ -73,7 +73,7 @@ const DoctorDetail = ({data}) => {
             </div>
             <div className="text-text">
               <p className="font-medium">Experience</p>
-              <p className="font-bold text-xl py-2">{doctor.experience}</p>
+              <p className="font-bold text-xl py-2">{doctor.experience} Years</p>
             </div>
             <div className="text-text">
               <p className="font-medium">Satisfied Patients</p>

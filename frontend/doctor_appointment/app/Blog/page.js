@@ -7,10 +7,10 @@ import Card from "./components/Card";
 
 const POSTS_PER_PAGE = 6;
 
-const metadata = {
-  title: "Our Blog | INFO PhD",
-  description: "Explore our latest articles on Dental and Medical topics.",
-};
+// const metadata = {
+//   title: "Our Blog | INFO PhD",
+//   description: "Explore our latest articles on Dental and Medical topics.",
+// };
 
 const Page = () => {
 
@@ -61,7 +61,7 @@ const Page = () => {
           {paginatedBlogs.map((blog, index) => (
             <Card
               key={index}
-              image={blog.feature_image}
+              image={blog.feature_image || '/ser.jpg'}
               heading={blog.title}
               content={blog.description_card}
               link={`/Blog/${blog.slug}`}

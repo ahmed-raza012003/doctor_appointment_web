@@ -27,20 +27,26 @@ const Section1 = () => {
   }, []);
 
   return (
-    <section className="bg-primary mx-4 md:mx-8 my-10 relative rounded-4xl overflow-hidden">
-      <div className="flex md:flex-row justify-between items-center p-6 md:px-8 md:py-10 gap-6 md:gap-0">
+    <section className="relative mx-4 md:mx-8 my-10 rounded-4xl overflow-hidden p-6 sm:p-10 text-white bg-gradient-to-r from-[#11849B] via-[#25BED2] to-[#11849B] bg-[length:400%] animate-gradient-x">
+      {/* Animated Blobs for background */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <div className="absolute w-80 h-80 bg-white opacity-10 rounded-full blur-3xl -top-10 -left-10 animate-pulse"></div>
+        <div className="absolute w-96 h-96 bg-[#25BED2] opacity-20 rounded-full blur-2xl top-32 -right-20 animate-ping"></div>
+      </div>
+
+      <div className="relative z-10 flex flex-col-reverse md:flex-row justify-between items-center gap-10">
         {/* Left Text Section */}
-        <div className="flex flex-col gap-4 w-full md:w-1/2">
-          <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl leading-snug md:leading-tight text-black">
-            Find and Book The <br />
-            <span className="text-text">Best Doctor</span> near you
+        <div className="w-full md:w-1/2 flex flex-col gap-6 text-center md:text-left">
+          <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl leading-snug text-black">
+            Find and Book the <br />
+            <span className="text-white">Best Doctor</span> near you
           </h1>
 
           {/* Animated Info Box */}
           <div
             className={classNames(
-              "flex gap-2 items-center px-4 py-2 rounded-lg w-fit text-white transition-opacity duration-1000 ease-in-out",
-              "backdrop-blur-md bg-gradient-to-r from-black/60 to-black/40 shadow-lg",
+              "mx-auto md:mx-0 flex gap-2 items-center px-4 py-2 rounded-lg w-fit text-white transition-opacity duration-700 ease-in-out",
+              "backdrop-blur-sm bg-white/10 shadow-md",
               {
                 "opacity-0": !fade,
                 "opacity-100": fade,
@@ -54,15 +60,17 @@ const Section1 = () => {
               alt="Tick Icon"
               className="inline-block"
             />
-            <span className="text-sm font-medium">{infoList[infoIndex]}</span>
+            <span className="text-sm sm:text-base font-medium">
+              {infoList[infoIndex]}
+            </span>
           </div>
 
           {/* Buttons */}
-          <div className="flex gap-3 mt-4 flex-wrap sm:flex-nowrap">
-            <button className="bg-white text-primary font-semibold px-4 py-2 rounded-full shadow hover:bg-gray-100 transition text-sm sm:text-base">
+          <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-3 mt-4">
+            <button className="bg-white text-primary font-semibold px-6 py-3 rounded-full shadow-md hover:bg-gray-100 transition text-sm sm:text-base">
               In-Clinic
             </button>
-            <button className="bg-white text-primary font-semibold px-4 py-2 rounded-full shadow hover:bg-gray-100 transition text-sm sm:text-base">
+            <button className="bg-white text-primary font-semibold px-6 py-3 rounded-full shadow-md hover:bg-gray-100 transition text-sm sm:text-base">
               Online Consultation
             </button>
           </div>
@@ -70,14 +78,17 @@ const Section1 = () => {
 
         {/* Right Image Section */}
         <div className="w-full md:w-1/2 flex justify-center md:justify-end">
-          <Image
-            src="/Doctor Images/main_doctor.webp"
-            width={500}
-            height={500}
-            alt="Main Doctor"
-            className="object-contain w-full sm:w-full md:max-w-[380px] h-auto rounded-xl"
-            priority
-          />
+          <div className="relative">
+            <div className="absolute -inset-4 bg-white/20 rounded-full blur-2xl z-0"></div>
+            <Image
+              src="/Doctor Images/main_doctor.webp"
+              width={500}
+              height={500}
+              alt="Main Doctor"
+              className="relative z-10 object-contain w-full sm:w-full md:max-w-[380px] h-auto rounded-xl"
+              priority
+            />
+          </div>
         </div>
       </div>
     </section>

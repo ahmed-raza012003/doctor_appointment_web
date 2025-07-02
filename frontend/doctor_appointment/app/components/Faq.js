@@ -30,7 +30,7 @@ const Faq = () => {
   };
 
   return (
-    <section className="flex flex-col md:flex-row justify-between items-center w-full px-4 md:px-12 py-10 gap-6 bg-primary">
+    <section className="flex flex-col md:flex-row justify-between rounded-2xl items-center w-full px-4 md:px-12 py-10 gap-6 bg-primary">
       {/* Image Section */}
       <div className="flex justify-center w-full md:w-1/2">
         <Image

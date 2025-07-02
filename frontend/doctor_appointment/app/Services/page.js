@@ -74,9 +74,8 @@ const Page = () => {
               {services.map((item, index) => (
                 <Card
                   key={index}
-                  // image={item.image || "/ser.jpg"} // fallback image
-                  image={"/ser.jpg"} // fallback image
-
+                  image={item.image || "/ser.jpg"} // fallback image
+                  // image={"/ser.jpg"} // fallback image
 
                   heading={item.name}
                   content={item.description}

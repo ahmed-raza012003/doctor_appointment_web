@@ -1,164 +1,53 @@
+// app/book-appointment/page.js
 "use client";
 
-import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { doctorsData } from "../data/DoctorData"; // Make sure path is correct
+import Link from "next/link";
 
-export default function Page() {
-  const [selectedDoctor, setSelectedDoctor] = useState(null);
-  const [selectedService, setSelectedService] = useState("");
-  const [selectedTime, setSelectedTime] = useState("");
-  const [appointmentType, setAppointmentType] = useState("");
-  const router = useRouter();
+const Page = () => {
+    const router = useRouter();
 
-  const handleDoctorChange = (e) => {
-    const doctorSlug = e.target.value;
-    const doctor = doctorsData.find((doc) => doc.slug === doctorSlug);
-    setSelectedDoctor(doctor);
-    setSelectedService("");
-    setSelectedTime("");
-  };
+    return (
+        <section className="p-6 min-h-screen bg-primary text-white rounded-xl my-4">
+            <div className="max-w-3xl mt-10 mx-auto">
+                <h1 className="text-4xl font-bold text-center mb-6">
+                    Schedule Your Appointment with Trusted Doctors
+                </h1>
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+                <p className="text-lg leading-8 text-justify">
+                    Easily book appointments with top-rated doctors in just a few steps. Whether you are looking for a general physician, skin specialist, or cosmetic expert, we have verified professionals ready to help you.
+                    <br /><br />
+                    View detailed doctor profiles, clinic schedules, services offered, and real patient reviews to make the best healthcare decision. Choose between in-clinic visits or online consultations from home.
+                    <br /><br />
+                    Avoid waiting in lines — reserve your slot with our secure and easy-to-use system. Or contact us directly on WhatsApp to book your appointment.
+                </p>
 
-    if (!selectedDoctor || !selectedService || !selectedTime || !appointmentType) {
-      alert("❌ Please fill in all the fields.");
-      return;
-    }
+                <div className="flex flex-col items-center gap-4 mt-10 w-full">
+                    <button
+                        onClick={() =>
+                            router.push(
+                                `${process.env.NEXT_PUBLIC_BACKEND_URL}/register`
+                            )
+                        }
+                        className="w-full max-w-md bg-text hover:bg-secondary-text text-primary font-bold ff py-4 px-8 rounded-lg text-lg flex items-center justify-center"
+                    >
+                        <span>📅</span>
+                        <span className="ml-2">Book Your Appointment Now</span>
+                    </button>
 
-    const appointmentData = {
-      doctorSlug: selectedDoctor.slug,
-      doctorName: selectedDoctor.name,
-      service: selectedService,
-      time: selectedTime,
-      type: appointmentType,
-      createdAt: new Date().toISOString(),
-    };
+                    <Link
+                        href="https://wa.me/923001234567?text=Hi,%20I%20want%20to%20book%20an%20appointment"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full max-w-md bg-green-500 hover:bg-green-600 text-white font-bold ff py-4 px-8 rounded-lg text-lg flex items-center justify-center"
+                    >
+                        <span>💬</span>
+                        <span className="ml-2">Book via WhatsApp</span>
+                    </Link>
+                </div>
+            </div>
+        </section>
+    );
+};
 
-    console.log("✅ Appointment Data:", appointmentData);
-
-    // Redirect or submit to backend
-    setTimeout(() => {
-      router.push("/");
-    }, 300);
-  };
-
-  return (
-    <section className="p-4 min-h-screen bg-primary rounded-2xl my-3 text-text">
-      <h1 className="w-full text-center text-3xl font-bold mb-8">
-        Book Your Appointment
-      </h1>
-
-      <form
-        onSubmit={handleSubmit}
-        className="max-w-xl mx-auto space-y-6 bg-white p-6 rounded-xl shadow-lg text-black"
-      >
-        {/* Select Doctor */}
-        <div>
-          <label htmlFor="doctor" className="block font-semibold mb-2">
-            Select Doctor
-          </label>
-          <select
-            id="doctor"
-            onChange={handleDoctorChange}
-            className="w-full p-3 border border-gray-300 rounded-lg"
-            required
-          >
-            <option value="">-- Choose a doctor --</option>
-            {doctorsData.map((doctor) => (
-              <option key={doctor.slug} value={doctor.slug}>
-                {doctor.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Select Service */}
-        {selectedDoctor && (
-          <div>
-            <label htmlFor="service" className="block font-semibold mb-2">
-              Select Service
-            </label>
-            <select
-              id="service"
-              className="w-full p-3 border border-gray-300 rounded-lg"
-              value={selectedService}
-              onChange={(e) => setSelectedService(e.target.value)}
-              required
-            >
-              <option value="">-- Choose a service --</option>
-              {selectedDoctor.allServices.map((service) => (
-                <option key={service} value={service}>
-                  {service}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-
-        {/* Select Time */}
-        {selectedDoctor && (
-          <div>
-            <label htmlFor="time" className="block font-semibold mb-2">
-              Select Time
-            </label>
-            <select
-              id="time"
-              className="w-full p-3 border border-gray-300 rounded-lg"
-              value={selectedTime}
-              onChange={(e) => setSelectedTime(e.target.value)}
-              required
-            >
-              <option value="">-- Choose a time --</option>
-              {selectedDoctor.fixedTimeSlots.map((slot) => {
-                const label = `${slot.day} (${slot.startTime} - ${slot.endTime})`;
-                return (
-                  <option key={`${slot.day}-${slot.startTime}`} value={label}>
-                    {label}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-        )}
-
-        {/* Appointment Type */}
-        <div>
-          <label className="block font-semibold mb-2">Appointment Type</label>
-          <div className="flex gap-4">
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="type"
-                value="inclinic"
-                onChange={(e) => setAppointmentType(e.target.value)}
-                required
-              />
-              In-clinic
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="type"
-                value="online"
-                onChange={(e) => setAppointmentType(e.target.value)}
-              />
-              Online Consultation
-            </label>
-          </div>
-        </div>
-
-        {/* Submit Button */}
-        <div>
-          <button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg"
-          >
-            Book Appointment
-          </button>
-        </div>
-      </form>
-    </section>
-  );
-}
+export default Page;

@@ -89,7 +89,7 @@ import { doctorsData } from "@/app/data/DoctorData";
 import { fetchCatData } from "@/app/data/CatData";
 import { getServicesData } from "@/app/data/ServicesData";
 
-const MAIN_LOGO = process.env.NEXT_PUBLIC_MAIN_LOGO || "/fallback_logo.png";
+const MAIN_LOGO = process.env.NEXT_PUBLIC_MAIN_LOGO || "/logo/main_logo.svg";
 
 const getRandomDoctors = (list, count = 5) => {
     const shuffled = [...list].sort(() => 0.5 - Math.random());
@@ -185,14 +185,15 @@ const Header = () => {
     const categoriesList = getServiceCategories(categories);
 
     return (
-        <header className="px-8 py-4 rounded-b-xl shadow-md flex justify-center md:justify-between items-center bg-[var(--color-primary)] text-text relative">
-            <div className="w-[100vw] p-4 md:p-0 md:w-auto">
-                <Link href="/" className="flex items-center">
+        <header className="md:pr-8 rounded-b-xl shadow-md flex justify-center md:justify-between gap-6  items-center bg-[var(--color-primary)] text-text relative">
+            <div className="pl-8 md:p-0 md:w-auto bg-text h-full mb-1 mx-18 m-0  rounded-br-2xl">
+                <Link href="/" className="flex items-center cursor-pointer">
                     <Image
-                        src={MAIN_LOGO}
+                        className="py-4"
+                        src={MAIN_LOGO || "/logo/main_logo.svg"}
                         alt="Description"
-                        width={200}
-                        height={100}
+                        width={280}
+                        height={150}
                     />
                 </Link>
             </div>
@@ -415,7 +416,7 @@ const Header = () => {
 
                 {/* Menu Items */}
                 <div className="flex flex-col gap-4">
-                    <div className="flex items-center justify-center p-4">
+                    <div className="flex items-center justify-center p-4 bg-text rounded-2xl">
                         <Link href="/" onClick={() => setShowMobileMenu(false)}>
                             <Image
                                 src={MAIN_LOGO}

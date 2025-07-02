@@ -15,7 +15,8 @@
     "react": "^19.0.0",
     "react-datepicker": "^8.4.0",
     "react-dom": "^19.0.0",
-    "react-hook-form": "^7.58.1"
+    "react-hook-form": "^7.58.1",
+    "vercel": "^44.2.8"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
