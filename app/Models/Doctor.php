@@ -28,7 +28,7 @@ class Doctor extends Model
     }
     public function services()
     {
-        return $this->belongsToMany(Service::class, 'doctor_services');
+        return $this->belongsToMany(Service::class, table: 'doctor_services');
     }
 
       public static function generateSlug($name, $id = null)

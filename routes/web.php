@@ -11,6 +11,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TimeslotController;
+use App\Http\Controllers\BookingController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -32,13 +33,22 @@ Route::middleware('auth')->group(function () {
 
     Route::get('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
+
+        Route::get('/patient/appointments', [PatientController::class, 'appointments'])->name('patient.appointments');
+    Route::get('/patient/profile', [PatientController::class, 'profile'])->name('patient.profile');
+    Route::get('/contact', [PatientController::class, 'contact'])->name('contact');
+  Route::post('/patient/profile', [PatientController::class, 'storeProfile'])->name('patient.profile.store');
+
 });
 
+
 // Admin routes with explicit GET and POST
-Route::prefix('admin')->middleware([])->group(function () {
+Route::prefix('admin')->middleware(['auth'])->group(function () {
     // List specializations
     Route::get('specializations', [SpecializationController::class, 'index'])->name('admin.specializations.index');
-
+ Route::get('/admin/appointments', [BookingController::class, 'appointments'])->name('admin.appointments');
+        Route::post('/admin/appointments/{appointment}', [BookingController::class, 'updateStatus'])->name('admin.appointments.update');
+      
     // Show create form
     Route::get('specializations/create', [SpecializationController::class, 'create'])->name('admin.specializations.create');
 
@@ -96,5 +106,13 @@ Route::get('timeslots', [TimeslotController::class, 'index'])->name('admin.times
     Route::put('timeslots/{timeslot}', [TimeslotController::class, 'update'])->name('admin.timeslots.update');
     Route::delete('timeslots/{timeslot}', [TimeslotController::class, 'destroy'])->name('admin.timeslots.destroy');
 Route::get('timeslots/manage/{doctor_id}', [TimeslotController::class, 'manage'])->name('admin.timeslots.manage');
+
+
+
 });
 
+
+  Route::get('booking/create', [BookingController::class, 'create'])->name('booking.create');
+  Route::post('booking', [BookingController::class, 'store'])->name('booking.store');
+  Route::post('booking/available-timeslots', [BookingController::class, 'getTimeslots'])->name('booking.timeslots');
+  Route::post('booking/services', [BookingController::class, 'getServices'])->name('booking.services');

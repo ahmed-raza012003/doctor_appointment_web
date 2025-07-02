@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
 use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class PatientController extends Controller
 {
   
+
     public function index(): View
     {
         $patients = Patient::with('user')->get();
@@ -60,5 +63,58 @@ class PatientController extends Controller
         $patient->delete();
 
         return redirect()->route('admin.patients.index')->with('success', 'Patient deleted successfully.');
+    }
+
+    public function appointments()
+    {
+        $appointments = Appointment::where('patient_id', Auth::id())
+            ->with(['doctor' => function ($query) {
+                $query->select('id', 'name');
+            }, 'service' => function ($query) {
+                $query->select('id', 'name');
+            }])
+            ->orderBy('appointment_time', 'desc')
+            ->get();
+
+        return view('dashboard.patients.appointments', compact('appointments'));
+    }
+
+     public function profile()
+    {
+        $patient = Patient::where('user_id', Auth::id())->first();
+        return view('dashboard.patients.profile', compact('patient'));
+    }
+
+    public function contact()
+    {
+        return view('dashboard.patients.contact');
+    }
+    public function storeProfile(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'cnic' => ['required', 'string', 'max:15', 'unique:patients,cnic,' . Auth::id() . ',user_id'],
+            'date_of_birth' => ['required', 'date'],
+        ]);
+
+        $patient = Patient::where('user_id', Auth::id())->first();
+
+        if ($patient) {
+            // Update existing patient record
+            $patient->update([
+                'cnic' => $request->cnic,
+                'date_of_birth' => $request->date_of_birth,
+            ]);
+            $message = 'Profile updated successfully.';
+        } else {
+            // Create new patient record
+            Patient::create([
+                'user_id' => Auth::id(),
+                'cnic' => $request->cnic,
+                'date_of_birth' => $request->date_of_birth,
+            ]);
+            $message = 'Profile created successfully.';
+        }
+
+        return redirect()->route('patient.profile')->with('success', 'Profile saved successfully.');
     }
 }
