@@ -438,7 +438,8 @@ let doctorsData = [];
 async function fetchDoctors() {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/doctors`, {
-      cache: "no-store",
+      // cache: "no-store",
+      next: { revalidate: 60 }, 
     });
 
     const json = await res.json();

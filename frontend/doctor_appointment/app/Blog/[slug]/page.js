@@ -6,7 +6,11 @@ import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/blogs`, { cache: "no-store" });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/blogs`,
+      {
+      //   cache: "no-store",
+        next: { revalidate: 60 },
+        });
     const data = await res.json();
     return data.data.map((blog) => ({
       slug: blog.slug,
@@ -19,7 +23,7 @@ export async function generateStaticParams() {
 
 
 export default async function BlogPage({ params }) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/blogs`, { cache: "no-store" });
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/blogs`, { next: { revalidate: 60 }, });
   const data = await res.json();
   const blog = data.data.find((b) => b.slug === params.slug);
 
